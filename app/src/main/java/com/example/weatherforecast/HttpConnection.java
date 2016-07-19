@@ -3,6 +3,8 @@ package com.example.weatherforecast;
 import android.os.Handler;
 import android.os.Process;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -16,7 +18,7 @@ import java.util.concurrent.Executors;
  * Created by martijn on 24/06/16.
  */
 public class HttpConnection {
-    private OkHttpClient httpClient;
+    private static OkHttpClient httpClient;
     private ExecutorService executorService;
 
     public interface HttpConnectionCallback {
@@ -25,8 +27,14 @@ public class HttpConnection {
     }
 
     public HttpConnection() {
-        httpClient = new OkHttpClient();
         executorService = Executors.newSingleThreadExecutor();
+    }
+
+    public OkHttpClient getHttpClient() {
+        if ( httpClient == null ) {
+            httpClient = new OkHttpClient();
+        }
+        return httpClient;
     }
 
     public void execute(final URL url, final HttpConnectionCallback callback,
@@ -43,13 +51,13 @@ public class HttpConnection {
         executorService.execute(command);
     }
 
-    private void get(URL url, final HttpConnectionCallback callback, final Handler handler) {
+    public void get(URL url, final HttpConnectionCallback callback, final Handler handler) {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
 
         try {
-            final Response response = httpClient.newCall(request).execute();
+            final Response response = getHttpClient().newCall(request).execute();
             final String result = handleResponse(response);
             handler.post(new Runnable() {
                 @Override
