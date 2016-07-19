@@ -26,9 +26,7 @@ public class YahooWeatherApiResponse {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    private ArrayList<WeatherData> forecast;
-
-    public void parseJson(String json) throws YahooWeatherApiException {
+    public ArrayList<WeatherData> parseJson(String json) throws YahooWeatherApiException {
         try {
             ObjectNode jsonResponse = (ObjectNode) objectMapper.readTree(json);
 
@@ -43,6 +41,8 @@ public class YahooWeatherApiResponse {
                                                    "Result doesn't contain a forecast node.");
             }
 
+            ArrayList<WeatherData> forecast = new ArrayList<>();
+
             if (forecastNode.isArray()) {
                 forecast = new ArrayList<>();
                 for(JsonNode item : forecastNode) {
@@ -50,29 +50,11 @@ public class YahooWeatherApiResponse {
                 }
             }
 
+            return forecast;
+
         } catch (IOException e) {
             throw new YahooWeatherApiException(YahooWeatherApiException.INVALID_RESPONSE_FROM_HOST,
                                                e.getMessage());
-        }
-    }
-
-    public ArrayList<WeatherData> getForecast() {
-        return forecast;
-    }
-
-    public class YahooWeatherApiException extends Exception {
-        public static final int INVALID_RESPONSE_FROM_HOST = 1;
-
-        private int errorCode;
-
-        public YahooWeatherApiException(int errorCode, String message) {
-            super(message);
-            this.errorCode = errorCode;
-        }
-
-        @Override
-        public String toString() {
-            return "Error: " + errorCode + ", " + getMessage();
         }
     }
 
