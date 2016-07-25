@@ -3,7 +3,6 @@ package com.example.weatherforecast;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -15,8 +14,6 @@ public class YahooWeatherApiResponseTest {
 
     @Test
     public void parseJsonTest() {
-        HashMap<String, WeatherData> forecastExpected = TestData.getExpectedForecast();
-
         ArrayList<WeatherData> forecast = new ArrayList<>();
         YahooWeatherApiResponse response = new YahooWeatherApiResponse();
         try {
@@ -26,7 +23,7 @@ public class YahooWeatherApiResponseTest {
         }
 
         for(WeatherData weather : forecast) {
-            WeatherData expectedWeather = forecastExpected.get(weather.date.toString());
+            WeatherData expectedWeather = TestData.getForecast(weather.date.toDateTimeAtStartOfDay().getMillis());
             assertTrue("Weather on " + weather.date.toString(), weather.equals(expectedWeather));
         }
     }
