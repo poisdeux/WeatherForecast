@@ -7,13 +7,13 @@ import org.joda.time.LocalDate;
  */
 public class WeatherData {
     public LocalDate date;
-    public Integer temperatureMin;
-    public Integer temperatureMax;
+    public Integer temperatureLow;
+    public Integer temperatureHigh;
 
-    public WeatherData(LocalDate date, int temperatureMin, int temperatureMax) {
+    public WeatherData(LocalDate date, int temperatureLow, int temperatureHigh) {
         this.date = date;
-        this.temperatureMax = temperatureMax;
-        this.temperatureMin = temperatureMin;
+        this.temperatureHigh = temperatureHigh;
+        this.temperatureLow = temperatureLow;
     }
 
     @Override
@@ -25,7 +25,12 @@ public class WeatherData {
             return false;
         }
         return date.equals(w.date)
-               && temperatureMax.equals(w.temperatureMax)
-               && temperatureMin.equals(w.temperatureMin);
+               && temperatureHigh.equals(w.temperatureHigh)
+               && temperatureLow.equals(w.temperatureLow);
+    }
+
+    @Override
+    public String toString() {
+        return date.toString() + " : low=" + temperatureLow + " : high="+temperatureHigh;
     }
 }
