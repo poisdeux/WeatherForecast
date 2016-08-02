@@ -14,6 +14,7 @@ public class TestData {
     public static String getJsonResponse() {
         return jsonResponse;
     }
+    public static LocalDate earliestForecastDate = new LocalDate(2016, 06, 27);
 
     public static HashMap<Long, WeatherData> getExpectedForecast() {
         if (forecastExpected != null)

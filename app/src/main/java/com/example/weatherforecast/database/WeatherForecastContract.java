@@ -14,5 +14,12 @@ public class WeatherForecastContract {
         public static final String COLUMN_NAME_DATE_EPOCH_MILLIS = "epoch";
         public static final String COLUMN_NAME_TEMP_LOW = "temp_low";
         public static final String COLUMN_NAME_TEMP_HIGH = "temp_max";
+
+        public static String[] ALL_COLUMNS = {
+                _ID,
+                COLUMN_NAME_DATE_EPOCH_MILLIS,
+                COLUMN_NAME_TEMP_HIGH,
+                COLUMN_NAME_TEMP_LOW
+        };
     }
 }

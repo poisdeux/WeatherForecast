@@ -5,7 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.weatherforecast.database.WeatherForecastContract;
 import com.example.weatherforecast.database.WeatherForecastDatabase;
+import com.example.weatherforecast.utils.DatabaseUtils;
+import com.example.weatherforecast.utils.DateUtils;
 
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,10 +20,9 @@ import org.robolectric.annotation.Config;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collection;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * Created by martijn on 19/07/16.
@@ -33,12 +35,7 @@ public class WeatherForecastDatabaseTest {
 
     @Before
     public void setup() throws URISyntaxException {
-        String filePath = getClass().getResource("/test.sqlite3").toURI().getPath();
-
-        this.database = SQLiteDatabase.openDatabase(
-                (new File(filePath)).getAbsolutePath(),
-                null,
-                SQLiteDatabase.OPEN_READWRITE);
+        this.database = DatabaseUtils.createDatabase();
 
         WeatherForecastDatabase weatherForecastDatabase =
                 new WeatherForecastDatabase(RuntimeEnvironment.application);
@@ -55,39 +52,36 @@ public class WeatherForecastDatabaseTest {
     }
 
     @Test
-    public void insertGetForecastTest() {
-        ArrayList<WeatherData> forecastInserted =
-                insertData(TestData.getExpectedForecast().values().toArray(new WeatherData[0]));
+    public void weatherForecastColumnsTest() {
+        WeatherForecastDatabase weatherForecastDatabase =
+                new WeatherForecastDatabase(RuntimeEnvironment.application);
+        Cursor cursor = weatherForecastDatabase.getForecast(this.database,
+                                                            DateUtils.toEpochMillisPreviousDay(TestData.earliestForecastDate));
+        assertTrue(cursor.getColumnIndex(WeatherForecastContract.Forecast._ID) != -1);
+        assertTrue(cursor.getColumnIndex(WeatherForecastContract.Forecast.COLUMN_NAME_TEMP_HIGH) != -1);
+        assertTrue(cursor.getColumnIndex(WeatherForecastContract.Forecast.COLUMN_NAME_TEMP_LOW) != -1);
+        assertTrue(cursor.getColumnIndex(WeatherForecastContract.Forecast.COLUMN_NAME_DATE_EPOCH_MILLIS) != -1);
+    }
 
+    @Test
+    public void insertGetForecastTest() {
+        Collection<WeatherData> expectedForecast = TestData.getExpectedForecast().values();
+        ArrayList<WeatherData> forecastInserted =
+                insertData(expectedForecast.toArray(new WeatherData[0]));
+
+        assertTrue(forecastInserted.size() == expectedForecast.size());
 
         WeatherForecastDatabase weatherForecastDatabase =
                 new WeatherForecastDatabase(RuntimeEnvironment.application);
-        Cursor cursor = weatherForecastDatabase.getForecast(this.database);
+        Cursor cursor = weatherForecastDatabase.getForecast(this.database,
+                                                            DateUtils.toEpochMillisPreviousDay(TestData.earliestForecastDate));
 
+        assertTrue("Retrieved amount of items: " + cursor.getCount() +
+                   " does not equal expected amount of items " + forecastInserted.size(),
+                   cursor.getCount() == forecastInserted.size());
 
         assertTrue("Cursor is empty", cursor.moveToFirst());
-
-        int columnIndexEpoch = cursor.getColumnIndex(WeatherForecastContract.Forecast.COLUMN_NAME_DATE_EPOCH_MILLIS);
-        int columnIndexTempLow = cursor.getColumnIndex(WeatherForecastContract.Forecast.COLUMN_NAME_TEMP_LOW);
-        int columnIndexTempHigh = cursor.getColumnIndex(WeatherForecastContract.Forecast.COLUMN_NAME_TEMP_HIGH);
-        do {
-            long epoch = cursor.getLong(columnIndexEpoch);
-            int tempLow = cursor.getInt(columnIndexTempLow);
-            int tempHigh = cursor.getInt(columnIndexTempHigh);
-
-            WeatherData weatherData = TestData.getForecast(epoch);
-            assertNotNull(weatherData);
-            assertTrue(weatherData.temperatureLow == tempLow);
-            assertTrue(weatherData.temperatureHigh == tempHigh);
-
-            assertTrue("Forecast: " + weatherData + " is in database but was not inserted.",
-                       forecastInserted.remove(weatherData));
-
-        } while(cursor.moveToNext());
-
-        for(WeatherData weatherData : forecastInserted) {
-            fail("Expected forecast: " + weatherData + " is not in the database");
-        }
+        TestUtils.forecastCursorTest(cursor);
     }
 
     /**
