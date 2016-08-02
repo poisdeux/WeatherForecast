@@ -1,6 +1,6 @@
 package com.example.weatherforecast.utils;
 
-import com.example.weatherforecast.WeatherForecastServiceEvent;
+import com.example.weatherforecast.service.WeatherForecastServiceEvent;
 
 import org.greenrobot.eventbus.EventBus;
 

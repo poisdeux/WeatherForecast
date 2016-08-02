@@ -18,12 +18,12 @@ public class WeatherData {
 
     @Override
     public boolean equals(Object o) {
-        WeatherData w;
-        try {
-            w = (WeatherData) o;
-        } catch (Exception e) {
+        if ( ! (o instanceof WeatherData) ) {
             return false;
         }
+
+        WeatherData w = (WeatherData) o;
+
         return date.equals(w.date)
                && temperatureHigh.equals(w.temperatureHigh)
                && temperatureLow.equals(w.temperatureLow);

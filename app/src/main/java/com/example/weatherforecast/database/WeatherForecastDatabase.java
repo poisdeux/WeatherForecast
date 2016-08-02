@@ -84,14 +84,6 @@ public class WeatherForecastDatabase extends SQLiteOpenHelper {
                             selectionArgs, null, null, sortOrder);
     }
 
-    public static ContentValues getContentValues(WeatherData weatherData) {
-        ContentValues values = new ContentValues();
-        values.put(WeatherForecastContract.Forecast.COLUMN_NAME_DATE_EPOCH_MILLIS, weatherData.date.toDateTimeAtStartOfDay().getMillis());
-        values.put(WeatherForecastContract.Forecast.COLUMN_NAME_TEMP_LOW, weatherData.temperatureLow);
-        values.put(WeatherForecastContract.Forecast.COLUMN_NAME_TEMP_HIGH, weatherData.temperatureHigh);
-        return values;
-    }
-
     /**
      * Returns the epoch from given cursor if it exists
      * @param c

@@ -1,5 +1,9 @@
 package com.example.weatherforecast;
 
+import com.example.weatherforecast.service.YahooWeatherApiException;
+import com.example.weatherforecast.service.YahooWeatherApiResponse;
+import com.example.weatherforecast.utils.TestData;
+
 import org.junit.Test;
 
 import java.util.ArrayList;

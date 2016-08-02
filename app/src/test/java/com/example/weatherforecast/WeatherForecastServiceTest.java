@@ -3,6 +3,7 @@ package com.example.weatherforecast;
 import android.app.Service;
 import android.content.Intent;
 
+import com.example.weatherforecast.service.WeatherForecastService;
 import com.example.weatherforecast.utils.TestData;
 
 import org.junit.After;

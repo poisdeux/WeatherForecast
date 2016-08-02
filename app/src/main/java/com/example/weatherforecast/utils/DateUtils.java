@@ -8,7 +8,11 @@ import org.joda.time.format.DateTimeFormatter;
  * Created by martijn on 02/08/16.
  */
 public class DateUtils {
-    private static DateTimeFormatter epochToDateTimeFormatter = DateTimeFormat.forPattern("E");
+    private static DateTimeFormatter epochToDateTimeFormatter = DateTimeFormat.forPattern("d-M-y");
+
+    public static String toDateString(LocalDate localDate) {
+        return toDateString(toEpochMillis(localDate));
+    }
 
     public static String toDateString(long epoch) {
         return epochToDateTimeFormatter.print(epoch);

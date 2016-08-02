@@ -1,4 +1,4 @@
-package com.example.weatherforecast;
+package com.example.weatherforecast.service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.os.Process;
 import android.util.Log;
 
+import com.example.weatherforecast.WeatherData;
 import com.example.weatherforecast.database.WeatherForecastDatabase;
 import com.example.weatherforecast.utils.EventBusUtils;
 
@@ -33,7 +34,7 @@ public class WeatherForecastService extends Service {
     private HttpConnection httpConnection;
 
     public class LocalBinder extends Binder {
-        WeatherForecastService getService() {
+        public WeatherForecastService getService() {
             return WeatherForecastService.this;
         }
     }

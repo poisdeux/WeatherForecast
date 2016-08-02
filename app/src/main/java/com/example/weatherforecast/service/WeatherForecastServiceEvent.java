@@ -1,4 +1,4 @@
-package com.example.weatherforecast;
+package com.example.weatherforecast.service;
 
 /**
  * Created by martijn on 05/08/16.

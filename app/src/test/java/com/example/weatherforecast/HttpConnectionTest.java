@@ -2,6 +2,7 @@ package com.example.weatherforecast;
 
 import android.os.Handler;
 
+import com.example.weatherforecast.service.HttpConnection;
 import com.example.weatherforecast.utils.TestData;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.MediaType;

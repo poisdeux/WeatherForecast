@@ -1,7 +1,8 @@
-package com.example.weatherforecast;
+package com.example.weatherforecast.utils;
 
 import android.database.Cursor;
 
+import com.example.weatherforecast.WeatherData;
 import com.example.weatherforecast.database.WeatherForecastContract;
 
 import static org.junit.Assert.assertNotNull;

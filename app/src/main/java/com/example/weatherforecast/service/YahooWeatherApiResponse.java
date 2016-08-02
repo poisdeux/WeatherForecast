@@ -1,5 +1,6 @@
-package com.example.weatherforecast;
+package com.example.weatherforecast.service;
 
+import com.example.weatherforecast.WeatherData;
 import com.example.weatherforecast.utils.JsonUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

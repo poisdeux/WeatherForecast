@@ -7,6 +7,8 @@ import com.example.weatherforecast.database.WeatherForecastContract;
 import com.example.weatherforecast.database.WeatherForecastDatabase;
 import com.example.weatherforecast.utils.DatabaseUtils;
 import com.example.weatherforecast.utils.DateUtils;
+import com.example.weatherforecast.utils.TestData;
+import com.example.weatherforecast.utils.TestUtils;
 
 import org.junit.After;
 import org.junit.Before;

@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">WeatherForecast</string>
+    <string name="swipe_down_to_refresh">Swipe down to refresh</string>
+    <string name="high">high</string>
+    <string name="low">low</string>
+    <string name="date">Date</string>
+    <string name="_1970_01_01">1970–01–01</string>
+    <string name="_0">0</string>
+    <string name="_100">100</string>
 </resources>

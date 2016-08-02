@@ -9,10 +9,11 @@
         android:layout_width="@dimen/listview_date_width"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:text="1970-01-01"/>
+        android:text="@string/_1970_01_01"/>
 
     <TextView
         android:id="@+id/temperature_low"
@@ -20,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/forecast_date"
         android:layout_toEndOf="@id/forecast_date"
-        android:text="0"/>
+        android:text="@string/_0"/>
 
     <TextView
         android:id="@+id/temperature_high"
@@ -28,6 +29,6 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/temperature_low"
         android:layout_toEndOf="@id/temperature_low"
-        android:text="100"/>
+        android:text="@string/_100"/>
 
 </RelativeLayout>

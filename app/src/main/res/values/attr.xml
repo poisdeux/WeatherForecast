@@ -1,0 +1,4 @@
+<resources>
+    <attr name="headerBackgroundColor" format="reference|color"/>
+    <attr name="headerTextColor" format="reference|color"/>
+</resources>

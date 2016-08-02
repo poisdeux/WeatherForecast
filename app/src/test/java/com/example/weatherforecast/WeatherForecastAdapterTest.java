@@ -71,7 +71,7 @@ public class WeatherForecastAdapterTest {
 
 
     private void testView(View view, Cursor c) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("E");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("d-M-y");
 
         WeatherForecastAdapter.ViewHolder viewHolder = (WeatherForecastAdapter.ViewHolder) view.getTag();
 

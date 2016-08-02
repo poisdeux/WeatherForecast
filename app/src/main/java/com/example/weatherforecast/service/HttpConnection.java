@@ -1,8 +1,7 @@
-package com.example.weatherforecast;
+package com.example.weatherforecast.service;
 
 import android.os.Handler;
 import android.os.Process;
-import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
