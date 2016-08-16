@@ -8,7 +8,6 @@ import com.example.weatherforecast.database.WeatherForecastDatabase;
 import com.example.weatherforecast.utils.DatabaseUtils;
 import com.example.weatherforecast.utils.DateUtils;
 
-import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +16,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
-import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;

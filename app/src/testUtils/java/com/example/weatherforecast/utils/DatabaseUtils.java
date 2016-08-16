@@ -1,18 +1,15 @@
 package com.example.weatherforecast.utils;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.weatherforecast.TestData;
 import com.example.weatherforecast.WeatherData;
 import com.example.weatherforecast.WeatherForecastActivity;
 import com.example.weatherforecast.database.WeatherForecastDatabase;
 
-import org.robolectric.RuntimeEnvironment;
-
 import java.io.File;
 import java.net.URISyntaxException;
-
-import static org.junit.Assert.assertTrue;
+import java.util.Collection;
 
 /**
  * Created by martijn on 01/08/16.
@@ -35,14 +32,22 @@ public class DatabaseUtils {
         return database;
     }
 
-    public static WeatherForecastDatabase fillDatabase(SQLiteDatabase database) {
-        WeatherForecastDatabase weatherForecastDatabase = new WeatherForecastDatabase(RuntimeEnvironment.application);
-        weatherForecastDatabase.onCreate(database);
+    /**
+     * fills the database with the given weatherdata elements
+     * @param context
+     * @param database database to use, if null a writable database is retrieved using {@link WeatherForecastDatabase#getWritableDatabase()}
+     * @param weatherData
+     */
+    public static void fillDatabase(Context context,
+                                                       SQLiteDatabase database,
+                                                       Collection<WeatherData> weatherData) {
+        WeatherForecastDatabase weatherForecastDatabase = new WeatherForecastDatabase(context);
 
-        for(WeatherData weatherData : TestData.getExpectedForecast().values()) {
-            weatherForecastDatabase.insertForecast(database, weatherData);
+        if( database == null )
+            database = weatherForecastDatabase.getWritableDatabase();
+
+        for(WeatherData item : weatherData) {
+            weatherForecastDatabase.insertForecast(database, item);
         }
-
-        return weatherForecastDatabase;
     }
 }
