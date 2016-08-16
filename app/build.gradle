@@ -4,6 +4,16 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
+    sourceSets {
+        String testUtilsDir = 'src/testUtils/java'
+        test {
+            java.srcDir testUtilsDir
+        }
+        androidTest {
+            java.srcDir testUtilsDir
+        }
+    }
+
     defaultConfig {
         applicationId "com.example.weatherforecast"
         minSdkVersion 9
@@ -23,8 +33,11 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:3.1.1'
+    testCompile 'com.squareup.okhttp3:mockwebserver:3.4.1'
+    compile 'com.squareup.okio:okio:1.9.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.squareup.okhttp:okhttp:2.3.0'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.5.2'
     compile 'joda-time:joda-time:2.9.4'
+    compile 'org.greenrobot:eventbus:3.0.0'
 }

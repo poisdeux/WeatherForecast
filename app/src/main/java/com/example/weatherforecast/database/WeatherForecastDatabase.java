@@ -34,8 +34,19 @@ public class WeatherForecastDatabase extends SQLiteOpenHelper {
 
     }
 
+    /**
+     * Deletes all tables from database
+     * @param db
+     */
     public void onDelete(SQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS " + WeatherForecastContract.Forecast.TABLE_NAME);
+    }
+
+    /**
+     * Deletes all rows from all tables in the database
+     */
+    public void onClear(SQLiteDatabase db) {
+        db.delete(WeatherForecastContract.Forecast.TABLE_NAME, null, null);
     }
 
     /**

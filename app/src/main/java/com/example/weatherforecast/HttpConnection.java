@@ -2,9 +2,8 @@ package com.example.weatherforecast;
 
 import android.os.Handler;
 import android.os.Process;
+import android.util.Log;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -23,7 +22,12 @@ public class HttpConnection {
 
     public interface HttpConnectionCallback {
         void onSuccess(String response);
-        void onError(int errorCode, String message);
+        void onError(ErrorCode errorCode, String message);
+    }
+
+    public static enum ErrorCode {
+        IO_EXCEPTION,
+        HTTP_RESPONSE_CODE_UNKNOWN
     }
 
     public HttpConnection() {
@@ -52,6 +56,7 @@ public class HttpConnection {
     }
 
     public void get(URL url, final HttpConnectionCallback callback, final Handler handler) {
+
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -69,7 +74,7 @@ public class HttpConnection {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    callback.onError(HttpException.IO_EXCEPTION, e.getMessage());
+                    callback.onError(ErrorCode.IO_EXCEPTION, e.getMessage());
                 }
             });
         } catch (final HttpException e) {
@@ -88,22 +93,24 @@ public class HttpConnection {
                 case 200:
                     return response.body().string();
                 default:
-                    throw new HttpException(HttpException.HTTP_RESPONSE_CODE_UNKNOWN,
+                    throw new HttpException(ErrorCode.HTTP_RESPONSE_CODE_UNKNOWN,
                                            "Server response: " + response);
             }
         } catch (IOException e) {
-            throw new HttpException(HttpException.IO_EXCEPTION, e.getMessage());
+            throw new HttpException(ErrorCode.IO_EXCEPTION, e.getMessage());
         }
     }
 
-    private class HttpException extends Exception {
-        public static final int IO_EXCEPTION = 0;
-        public static final int HTTP_RESPONSE_CODE_UNKNOWN = 1;
-        private int errorCode;
+    public class HttpException extends Exception {
+        private ErrorCode errorCode;
 
-        public HttpException(int errorCode, String message) {
+        public HttpException(ErrorCode errorCode, String message) {
             super(message);
             this.errorCode = errorCode;
+        }
+
+        public ErrorCode getErrorCode() {
+            return errorCode;
         }
     }
 }

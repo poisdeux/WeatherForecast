@@ -2,6 +2,7 @@ package com.example.weatherforecast;
 
 import android.os.Handler;
 
+import com.example.weatherforecast.utils.TestData;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -39,8 +40,8 @@ public class HttpConnectionTest {
             }
 
             @Override
-            public void onError(int errorCode, String message) {
-                fail("Got error "+errorCode+": "+message);
+            public void onError(HttpConnection.ErrorCode errorCode, String message) {
+                fail("Got error "+errorCode.name()+": "+message);
             }
         }, new Handler());
     }
@@ -56,8 +57,8 @@ public class HttpConnectionTest {
             }
 
             @Override
-            public void onError(int errorCode, String message) {
-                fail("Got error "+errorCode+": "+message);
+            public void onError(HttpConnection.ErrorCode errorCode, String message) {
+                fail("Got error "+errorCode.name()+": "+message);
             }
         }, new Handler());
     }
