@@ -6,13 +6,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.filters.FlakyTest;
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.test.suitebuilder.annotation.LargeTest;
 
 import com.example.weatherforecast.database.WeatherForecastDatabase;
+import com.example.weatherforecast.testHelpers.FlakyTest;
 import com.example.weatherforecast.testHelpers.Utils;
 import com.example.weatherforecast.utils.DateUtils;
 import com.example.weatherforecast.utils.TestData;
@@ -85,45 +85,49 @@ public class WeatherForecastActivityTest {
         }
     }
 
-    // This test may not always give correct results.
-    // If this test results in false negatives we need to use a try-catch to run this test
-    // a couple of times before failing.
-    @FlakyTest
+
     @Test
     public void refreshAnimationDeviceConfigurationChangeTest() throws Exception {
-        Instrumentation.ActivityMonitor activityMonitor =
+        final Instrumentation.ActivityMonitor activityMonitor =
                 new Instrumentation.ActivityMonitor(WeatherForecastActivity.class.getName(),
                                                     null,
                                                     false);
         InstrumentationRegistry.getInstrumentation().addMonitor(activityMonitor);
 
-        MockResponse response = new MockResponse();
-        response.setBody(TestData.getJsonResponse());
-        response.setBodyDelay(10, TimeUnit.SECONDS);
-        server.enqueue(response);
-
-        Handler handler = new Handler(mActivityRule.getActivity().getMainLooper());
-        handler.post(new Runnable() {
+        FlakyTest flakyTest = new FlakyTest(2, new FlakyTest.Test() {
             @Override
-            public void run() {
-                mActivityRule.getActivity().onRefresh();
+            public void execute() {
+                MockResponse response = new MockResponse();
+                response.setBody(TestData.getJsonResponse());
+                response.setBodyDelay(10, TimeUnit.SECONDS);
+                server.enqueue(response);
+
+                Handler handler = new Handler(mActivityRule.getActivity().getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mActivityRule.getActivity().onRefresh();
+                        SwipeRefreshLayout swipeRefreshLayout =
+                                (SwipeRefreshLayout) mActivityRule.getActivity().findViewById(R.id.swipe_refresh_layout);
+                        assertNotNull(swipeRefreshLayout);
+                        assertTrue(swipeRefreshLayout.isRefreshing());
+                        Utils.changeOrientation(mActivityRule.getActivity());
+                    }
+                });
+
+                SystemClock.sleep(2000);
+
+                //Get the new activity so we can check if the new SwipeRefreshLayout is set to refreshing
+                Activity activity = activityMonitor.waitForActivityWithTimeout(5000);
+                assertNotNull(activity);
                 SwipeRefreshLayout swipeRefreshLayout =
-                        (SwipeRefreshLayout) mActivityRule.getActivity().findViewById(R.id.swipe_refresh_layout);
+                        (SwipeRefreshLayout) activity.findViewById(R.id.swipe_refresh_layout);
                 assertNotNull(swipeRefreshLayout);
                 assertTrue(swipeRefreshLayout.isRefreshing());
-                Utils.changeOrientation(mActivityRule.getActivity());
             }
         });
 
-        SystemClock.sleep(2000);
-
-        //Get the new activity so we can check if the new SwipeRefreshLayout is set to refreshing
-        Activity activity = activityMonitor.waitForActivityWithTimeout(5000);
-        assertNotNull(activity);
-        SwipeRefreshLayout swipeRefreshLayout =
-                (SwipeRefreshLayout) activity.findViewById(R.id.swipe_refresh_layout);
-        assertNotNull(swipeRefreshLayout);
-        assertTrue(swipeRefreshLayout.isRefreshing());
+        flakyTest.run();
     }
 
     private void resetDatabase() {
